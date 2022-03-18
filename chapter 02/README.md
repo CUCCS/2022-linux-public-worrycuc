@@ -55,7 +55,7 @@
 
 ![](./img/apt-purge.png)
 
-     如图，命令行提示：此操作会删除所有格式为tshark的文件，但不删除自动依赖下载的其他软件包，如要删除使用`sudo apt autoremove`
+  如图，命令行提示：此操作会删除所有格式为tshark的文件，但不删除自动依赖下载的其他软件包，如要删除使用`sudo apt autoremove`
    - 输入`sudo apt autoremove`删除依赖安装的软件包
 
 ![](./img/autoremove.png)
@@ -110,7 +110,6 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 
 ![](./img/ls-R.png)
 
-
   `find . -type f |xargs cat |xargs grep 666 `grep就是文本检索，不需要再用cat
   `find . -type f |xargs grep 666`
 
@@ -149,6 +148,7 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 ![](./img/gzip-rd.png)
 
 [gzip 压缩解压缩操作 --Ubuntu 20.04](https://asciinema.org/a/475880)
+
   - bzip2
     `dpkg -L bzip2`确认已自带该软件包
 
@@ -159,6 +159,7 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 ![](./img/bzip2.png)
 
 [bzip2 压缩解压缩操作 --Ubuntu 20.04](https://asciinema.org/a/475883)
+
   > 上述方法只能压缩文件，而不能打包和压缩目录。利用tar可以完成打包压缩目录。
 
   - **tar**
@@ -172,6 +173,7 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 ![](./img/tar-gz.png)
 
 [tar 压缩解压缩操作 --Ubuntu 20.04](https://asciinema.org/a/475886)
+
   - zip
     使用zip可以打包压缩文件和文件夹
     **zip打包压缩解压缩文件后，原文件不会消失，解压用unzip命令**`zip -r test.zip 1.txt 2.txt test` `unzip test.zip`
@@ -179,6 +181,7 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 ![](./img/test-zip.png)
 
 [zip 压缩解压缩操作 --Ubuntu 20.04](https://asciinema.org/a/475889)
+
   - 7z
    使用`sudo apt`下载7z时，软件名为7z时，无法找到该软件包，应使用p7zip
 
@@ -194,6 +197,7 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 ![](./img/test-7z.png)
 
 [7z 压缩解压缩操作 --Ubuntu 20.04](https://asciinema.org/a/475890)
+
   - rar
     rar是私有压缩算法格式，**Linux平台只打包压缩文件或文件夹且原文件不会消失，不能解压缩**
     使用命令`rar a test.rar 1.txt 2.txt``rar a -r test.rar test`
@@ -211,6 +215,7 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 ![](./img/p7zip-rar.png)
 
 [rar 压缩解压缩操作 --Ubuntu 20.04](https://asciinema.org/a/475892)
+
   - linux下zip解压乱码文件
     将主机的包含中文名的文件传输给虚拟机，然后再解压，解决乱码问题
     由于Ubuntu虚拟机没有中文显示功能，所以使用该方法还是无法显示中文
@@ -224,8 +229,10 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 ![](./img/centos-gzip.png)
 
 [gzip 压缩解压缩操作 --CentOS 7.7](https://asciinema.org/a/476309)
+
   - bzip2压缩解压缩操作
     值得注意的是：**在unbuntu 20.04 上已自动安装bzip2，但是在centOS上需要先安装**
+
 ![](./img/centos-install-bzip2.png)
 
 ![](./img/centos-bzip2.png)
@@ -242,6 +249,7 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 ![centos-unzip](./img/centos-unzip.png)
 
 [zip 压缩解压缩操作 --CentOS 7.7](https://asciinema.org/a/475951)
+
   - 7z压缩解压缩操作
   默认Centos7没有安装p7zip安装包，默认源里面也没有这个安装包，需要安装epel源才能安装p7zip安装包。在仅使用`yum install p7zip`时虽然可以下载成功，但是在bash中无法识别p7zip命令或者7z。但是当下载epel源后，再下载就可以使用`yum -y install epel-release` `yum -y install p7zip p7zip-plugins`
 
@@ -252,6 +260,7 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 ![](./img/centos-7z.png)
 
 [7z 压缩解压缩操作 --CentOS 7.7](https://asciinema.org/a/476320)
+
   - tar压缩解压缩操作
     和ubuntu上的操作一致`tar -czvf testtar-2.tar.gz 1.txt 2.txt` `tar -xzvf testtar-2.tar.gz` `tar -jcvf test.rar.bz2 1.txt 2.txt`
 
@@ -312,6 +321,7 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 ![](./img/ping4.png)
 
 [子进程管理实验 --Ubuntu 20.04](https://asciinema.org/a/475893)
+
 * CentOS 系统环境下
 - `ping www.baidu.com`,用`ctrl c`可以中止
 
@@ -330,7 +340,9 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 ![](./img/centos-ping-3.png)
 
 [子进程管理实验 --CentOS 7.7](https://asciinema.org/a/476323)
+
 ### 【硬件信息获取】获取目标系统的 CPU、内存大小、硬盘数量与硬盘容量
+
 * ubuntu 20.04下进行查看
   * 使用`cat /proc/cpuinfo |grep "model name" && cat/proc/cpuinfo |grep "physical id"` 查看cpu
 
@@ -345,12 +357,13 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 
 ![](./img/mem&disk.png)
 
-    内存大小：2030972 KB
-    硬盘：VirtualBox里现有6个虚拟硬盘，正在使用的虚拟硬盘内存是80GB
+  内存大小：2030972 KB
+  硬盘：VirtualBox里现有6个虚拟硬盘，正在使用的虚拟硬盘内存是80GB
 
 ![](./img/check-disk.png)
 
 [【硬件信息获取】 --Ubuntu 20.04](https://asciinema.org/a/475894)
+
 * CentOS 下进行查看
   使用与Ubuntu 20.04 一样的操作`cat /proc/cpuinfo |grep "model name" && cat/proc/cpuinfo |grep "physical id"` ` cat /proc/meminfo |grep MemTotal` `fdisk -l |grep Disk`
 
@@ -359,13 +372,16 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 [【硬件信息获取】 --CentOS 7.7](https://asciinema.org/a/475948)
 
 ## 遇到的问题及解决方法
+
 * install tmux 报错：确实目标文件
   - 搜索在ubuntu20.04 上linux系统中 tmux属于哪一类软件包
 
 ![](./img/apt-tmux.png)
 
-    查看ubuntu官网，可知tmux 属于focal类软件包，也就是说是官方版本的软件。
+  查看ubuntu官网，可知tmux 属于focal类软件包，也就是说是官方版本的软件。
+
 [Binary package “tmux” in ubuntu focal](https://launchpad.net/ubuntu/focal/+package/tmux)
+
   - 也就是说问题很有可能是指令输入错误。输入`sudo apt install tmux`就成功下载了
   - 下载过程中出现下图情况，`CTRL c`退出后，重新install，提示已经下好
 
@@ -388,11 +404,12 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
 ![](./img/rar-version.png)
 
   思考可能是版本号的原因，试用另外一种`p7zip-rar`软件尝试解压，解压成功！
-*  linux下zip解压乱码文件,老师的代码无效`unzip -O cp639` 。。。
+*  linux下zip解压乱码文件,老师的代码无效`unzip -O cp639`
 
 ![](./img/unzip-O.png)
 
-   此操作可以执行，原因应该是在该虚拟机下无法识别中文字符，在CentOS下进行实验。
+  此操作可以执行，原因应该是在该虚拟机下无法识别中文字符，所以在CentOS下进行实验，可以成功解决windows中文文件在linux系统解压后出现乱码的问题。
+
 * 在centos环境下，rar没有下载源，不能直接使用`yum install`命令下载。
   - 在官方网站下载，因为云端的CentOS系统是linux64，所以选用linux x64的链接下载。**使用下载链接时，--no-check-certificate**
   ```
@@ -436,11 +453,11 @@ cd /tmp && for i in $(seq 0 1024);do dir="test-$RANDOM";mkdir "$dir";echo "$RAND
   单独用find似乎无法查看列出文件内容。尝试 xargs 结合 find 使用
   想法：先列出所有文件，依次cat，grep 666 
   - `sudo cat /tmp |grep 666` `sudo cat /tmp |xargs grep 666` `sudo ls -R /tmp |xargs cat |xargs grep 666`
-ls -R的直接输出结果无法直接与cat 命令连接
+  - ls -R的直接输出结果无法直接与cat 命令连接
 
 ![](./img/ls-R-cat.png)
 
-ls cat 也不行，ls列出的是文件目录，不是文件名
+  - ls cat 也不行，ls列出的是文件目录，不是文件名
 
 ![](./img/ls-cat.png)
 
@@ -448,9 +465,9 @@ ls cat 也不行，ls列出的是文件目录，不是文件名
  所以直接`find . -type f |xargs grep 666 `就好了
 
 ## 参考文献
-[Binary package “tmux” in ubuntu focal](https://launchpad.net/ubuntu/focal/+package/tmux)
-[获取linux硬盘空间总数命令,linux查询内存、CPU、硬盘等系统信息的命令](https://blog.csdn.net/weixin_42109925/article/details/116553434)
-[linux下文件和目录的压缩和解压（gzip、bzip2、tar）](https://blog.csdn.net/tomatolee221/article/details/84963433)
-[CentOS执行apt-get提示不存在](https://www.cnblogs.com/li-mei/p/10387955.html)
-[CentOS安装tshark抓包工具](https://www.cnblogs.com/alog9/p/11805716.html)
-[centos 安装rar](https://blog.csdn.net/qq_21956483/article/details/79287244)
+* [Binary package “tmux” in ubuntu focal](https://launchpad.net/ubuntu/focal/+package/tmux)
+* [获取linux硬盘空间总数命令,linux查询内存、CPU、硬盘等系统信息的命令](https://blog.csdn.net/weixin_42109925/article/details/116553434)
+* [linux下文件和目录的压缩和解压（gzip、bzip2、tar）](https://blog.csdn.net/tomatolee221/article/details/84963433)
+* [CentOS执行apt-get提示不存在](https://www.cnblogs.com/li-mei/p/10387955.html)
+* [CentOS安装tshark抓包工具](https://www.cnblogs.com/alog9/p/11805716.html)
+* [centos 安装rar](https://blog.csdn.net/qq_21956483/article/details/79287244)
