@@ -2,7 +2,7 @@
 
 ## 实验目的
 
-* 自查linux服务器系统使用基础相关操作学习成果；
+* 自查linux服务器系统使用基础相关操作学习成果
 
 ## 实验环境
 
@@ -21,7 +21,7 @@
 * [x] 完整实验操作过程通过asciinema进行录像并上传，文档通过github上传
 
 ## 实验自评
-实验完成情况：100%
+实验完成情况：98%
 ## 实验过程记录
 
 ### 添加一个用户并使其具备sudo执行程序的权限
@@ -514,7 +514,9 @@ $ systemctl get-default
 * 系统管理命令
 
 得到信息为**启动耗时9.289s**
+
 键盘为**en_US-UTF8**
+
 系统默认时间是**中国时间**
 
 [跟练【系统管理部分命令】——CentOS 7.7](https://asciinema.org/a/481898)
@@ -663,8 +665,8 @@ sudo systemctl status run-when-network # 查看服务状态
 ![](./img/ls-l-sudoers.png)  
 
 * 查看了分区表和文件系统详细信息后，想知道disk目录/dev/mapper/ubuntu是什么Linux device-mapper linear Device Mapper 是 Linux 2.6 内核中提供的一种从逻辑设备到物理设备的映射框架机制 逻辑卷管理.
- - ubuntu-vg 指的是LVM中的VG结构，ubuntu-lv指的是Lv结构
- - 使用命令`sudo vgdisplay`,`sudo lvdisplay`可以查看其中的相关信息。
+  - ubuntu-vg 指的是LVM中的VG结构，ubuntu-lv指的是Lv结构
+  - 使用命令`sudo vgdisplay`,`sudo lvdisplay`可以查看其中的相关信息。
 
 ![](./img/vgdisplay.png)
 
@@ -692,6 +694,7 @@ systemctl reboot #重启
 ![](./img/VBAdditions.png)
 
 * 在实现自动挂载时，Ubuntu突然变成图形化界面。
+  - 修改开机自启动项后恢复了
 
 ![](./img/desktop.png)
 
@@ -700,7 +703,6 @@ sudo systemctl get-default # 本系统输出为 graphic.target
 sudo systemctl set-defalut multi-users.target # 安装依赖工具
 systemctl reboot # 重启
 ```
-修改后恢复了
 
 
 * 配置文件和脚本都显示正常，但是start后看服务的status还是inactive
@@ -713,19 +715,25 @@ systemctl reboot # 重启
 ![](./img/active.png)
 
 * 网络断开了，但是进程依旧无法结束。
- - 原因：查看`network-manager.service`的状态，发现断网操作后依旧是`active`的状态，又因为我的service配置文件是`requires`的`network.target`,所以断网后我的进程依旧会进行中。
- - 既然service配置文件不能检测断网，那就只能依靠脚本了。更改脚本，使脚本检验断网情况，成功满足条件。
+  -  原因：查看`network-manager.service`的状态，发现断网操作后依旧是`active`的状态，又因为我的service配置文件是`requires`的`network.target`,所以断网后我的进程依旧会进行中。
+  - 既然service配置文件不能检测断网，那就只能依靠脚本了。更改脚本，使脚本检验断网情况，成功满足条件。
 
 ![](./img/network-manger.png)
 
 ## 参考文献
-* [加载光盘](https://blog.csdn.net/weixin_46446448/article/details/104596928?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ETopBlog-1.topblog&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ETopBlog-1.topblog&utm_relevant_index=1)
+
 * [Ubuntu-server 18.04.2 LTS 安装VirtualBox增强功能](https://www.jianshu.com/p/45672da5e084)
-https://www.cnblogs.com/sbman/p/7346333.html
+
 * [virtualbox下怎么实现ubuntu20.04开机自动挂载共享文件夹?](https://freexyz.cn/zhishi/81720.html)
+
 * [Ubuntu 18.04 启用 rc.local 设置开机启动](https://www.cnblogs.com/digdeep/p/9760025.html)
+
 * [动态扩容](https://www.cnblogs.com/kevingrace/p/5845634.html)
+
 * [linux 网络开启之后执行脚本](https://blog.csdn.net/qq_32835203/article/details/79258732)
+
 * [shell脚本自动检测网络掉线和自动重连](https://www.jb51.net/article/177354.htm)
+
 * [systemd 实践-WIFI自动重连](https://blog.csdn.net/weixin_44821644/article/details/121096046)
+
 * [Systemd 入门教程：实战篇](https://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-part-two.html)
