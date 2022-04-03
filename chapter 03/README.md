@@ -647,7 +647,7 @@ sudo systemctl status run-when-network # 查看服务状态
 |     **将一个用户添加到一个用户组**      |                      `usermod -a -G`                       |                         `usermod -a -G`                         |
 |  **查看当前系统的分区表**   |                       `parted -l`                        |                         `parted -l`                         |
 |     **查看文件系统详细信息**      |          `parted -l`           |                    `parted -l`                    |
-|    **实现脚本杀不死**     |         `sudo vim /lib/systemd/system/xxx.service` `restart=always`    |              ` find . | xargs grep -ri '666'`                |
+|    **实现脚本杀不死**     |         `sudo vim /lib/systemd/system/xxx.service` `restart=always`    |              `sudo vim /lib/systemd/system/xxx.service` `restart=always`                |
 | **实现在网络连通时运行一个指定脚本，在网络断开时运行另一个脚本** |                    编写service配置文件，执行时运行一个脚本，断开时执行另一个脚本                 |                     编写service配置文件，执行时运行一个脚本，断开时执行另一个脚本                    |
 
 ------
