@@ -4,7 +4,6 @@ before_install:
   - sudo apt-get update && sudo apt-get install -y shellcheck
   - sudo apt-get install -y imagemagick
 
-
 script:
 - ls -l
 - cd chapter4/
