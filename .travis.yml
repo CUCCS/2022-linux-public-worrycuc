@@ -3,7 +3,6 @@ language: bash
 before_install:
   - sudo apt-get update && sudo apt-get install -y shellcheck
   - sudo apt-get install -y imagemagick
-  - sudo apt-get install -y svgo
 
 
 script:
@@ -27,7 +26,7 @@ script:
 - ls -l
 - cd ../codefile/
 - bash task1.sh -h
-- bash task1.sh -w ../test-img/
+- bash task1.sh -w ../test-img/2/
 - bash task1.sh -r ../test-img/
 - worry
 - 1
