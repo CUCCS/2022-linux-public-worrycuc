@@ -247,19 +247,19 @@ do
         continue
     fi
     host_id=$(echo "$line" | cut -f 3)   
-    echo "$host_id"
+    # echo "$host_id"
     host_id_arrary[$count]="$host_id" #将所有记录存进数组,注意数组从1开始
     
     host_ip=$(echo "$line" | cut -f 1)   
-    echo "$host_ip"
+    # echo "$host_ip"
     host_ip_arrary[$count]="$host_ip"
 
     url=$(echo "$line" | cut -f 5)   
-    echo "$url"
+    # echo "$url"
     url_arrary[$count]="$url"
 
     status=$(echo "$line" | cut -f 6)   
-    echo "$status"
+    # echo "$status"
     status_arrary[$count]="$status"
     line_num=$((line_num+1))
     count=$((count+1))
