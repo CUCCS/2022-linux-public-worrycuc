@@ -3,10 +3,11 @@ language: bash
 before_install:
   - sudo apt-get update && sudo apt-get install -y shellcheck
   - sudo apt-get install -y imagemagick
+  - sudo apt-get install -y p7zip
 
 script:
 - ls -l
-- cd chapter4/
+- cd chapter04/
 - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/worldcupplayerinfo.tsv
 - wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/web_log.tsv.7z
 - ls -l
@@ -19,6 +20,7 @@ script:
 - echo "test task2-2"
 - bash task2-2.sh -h
 - bash task2-2.sh -d / -r -s -u -i -n
+- cat ./output2.txt
 - echo "test task2-2 is done"
 - echo "test task1"
 - cd ../test-img/
