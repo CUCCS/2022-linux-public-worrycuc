@@ -1,7 +1,3 @@
-<style>pre {
-  overflow-y: auto;
-  max-height: 300px;
-}</style>
 # 实验四：任务二 ——Web服务器访问日统计结果记录
 
 ## 实验目的

@@ -40,17 +40,18 @@ function image_compre { #jpg,jpeg
 
 function resolution_compre {
   echo "$1"
-  read -p "please input the quality you want:" quality
-  if [[ $quality -gt 100 ]]&&[[ $quality -le 0 ]];then #确保值小于100
-   echo "the quality should smaller than 100,bigger than 0"
-  fi
+ # 为了travis测试不另外设置命令端输入
+ # read -p "please input the quality you want:" quality
+ # if [[ $quality -gt 100 ]]&&[[ $quality -le 0 ]];then #确保值小于100
+ #  echo "the quality should smaller than 100,bigger than 0"
+ # fi
   folderpath=$1
   if [[ -f "$folderpath" ]]||[[  -d "$folderpath" ]];then
     for file in $(find "$folderpath" -name "*.jpeg" -or -name "*.png" -or -name "*.jpg" );do  #imageMagick不支持svg
       echo "$file"
       name=$(echo "$file" |rev| cut -d "." -f 2- | rev)
       name2=$(echo "$file" |rev| cut -d "." -f 1 | rev)
-      convert "$file" -quality "${quality}" "${name}_comp.${name2}" #尺寸不变的分辨率压缩
+      convert "$file" -quality "80" "${name}_comp.${name2}" #尺寸不变的分辨率压缩
     done
   fi
   echo "work is done"
