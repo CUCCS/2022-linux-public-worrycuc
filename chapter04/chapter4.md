@@ -181,11 +181,10 @@
 
 *  测试性能，讲图片目录传给虚拟机 `scp `,进行功能测试，查看运行结果
 
-![](./img/test.png)
+  ![](./img/test.png)
 
-![](./img/result.png)
+  ![](./img/result.png)
 
-* 观察到svg不使用**ImageMagick**进行分辨率压缩和水印处理，使用**svgo** 
 
 ### 任务二 a——2014世界杯运动员数据
 * 下载文本文件后对文件内容和结构格式进行分析,该文件以`tab`为分隔符，内容包括国家、姓名、年龄、位置等。
@@ -231,7 +230,7 @@ done < ../worldcupplayerinfo.tsv
   esac
   ```
   * 最年长和最年轻球员，获取年龄字段和对应的姓名后，每次将提取的年龄与上一次结果进行比较，存储下较大值和较小值以及对应姓名。
-```shell
+  ```shell
   age=$(echo "$line" | cut -f 6) # 年龄字段
   name=$(echo "$line" | cut -f 9) # 对应的球员姓名
   echo "$age"
@@ -242,7 +241,7 @@ done < ../worldcupplayerinfo.tsv
     max=$age #存放每次比较最大值
     oldest=$name
   fi
-```
+  ```
   * 姓名长度，这里姓名长度的比较是以**字符个数**为标准。提取姓名片段后，先对字符串进行预处理，在使用`${#STRING}`的方式取得长度，进行比较得到最大值和最小值。
 
 * 关于名字长度的字符个数比较有几点需要特别**注意**：
@@ -273,64 +272,40 @@ done < ../worldcupplayerinfo.tsv
         longest=$name
     fi
   ```
-* 结果写入独立文件，采用重定向 `>>`方式
-```shell
-printf "%s has the longest name, length is %s \n" "${longest}" "${max}" >>./output.txt
-```
+
 
 ### 任务二 b——Web服务器访问日志
 * 下载文本文件后对文件内容和结构格式进行分析,文件数据由主机ip，主机id，请求方法，URL，状态码，用户编号组成。
-* 统计目标值出现的总次数的算法，几种文本数据统计的功能核心算法和思路基本一致。
-  * 首先是遍历所有行的指定数据部分，将所有数据存进数组，方便之后操作。
+* 前三项功能都是一样的思路，将需要输出的字段去重，记录重复次数，在倒序排序，输出前100位
   ```shell
-  while read line #阅读每行
-  do
-    if [[ $line_num -eq 0 ]];then #去掉第一行 行名的干扰
-        line_num=$((line_num+1))
-        continue
-    fi
-    host_id=$(echo "$line" | cut -f 3)   
-    #echo "$host_id"
-    host_id_arrary[$count]="$host_id" #将所有记录存进数组
-    count=$((count+1))
-  done
+  awk -F '\t' '{print $3}' web_log.tsv | sort | uniq -c | sort -nr | head -100 
   ```
-  * 然后是得到出现的所有数据情况的不重复数组，由于日志有大量重复内容，该筛选出来的列表不能有重复部分，以方便后续的统计工作。我这里使用函数完成。这样可以多个统计里重复用到。
+* 统计不同的状态码和百分比，就无法按上式完成，选择在AWK中内写函数完成该操作。**AWK计算是浮点数计算**。
+  * 唯一需要注意的一点就是。不要把行名也算进去，采用 `$6 !~ /[response]/` 来实现
+    
+    ![](./img/response.png)
+  
   ```shell
-  function get_list { #不含重复内容的所有内容的数组
-  my_list[0]="${my_arrary[0]}" #之前遍历得到的数组
-  list_num=1
-  for id in "${my_arrary[@]}"; do 
-    list_count=0 
-    for i in "${my_list[@]}"; do
-      if [[ "${id}" == "$i" ]];then
-        list_count=$((list_count+1))
-      fi
-    done
-    if [[ $list_count -eq 0 ]];then #没有重复则写进无重复数组
-    my_list[$list_num]="$id" 
-    echo "$id"
-    list_num=$((list_num+1))
-    fi
-  done
-  }
+    awk -F '\t' 'BEGIN{counts=0;printf "times: percentage: status:\n"} $6 !~ /response/ {status[$6]=$6;times[$6]++;counts++} END{for(code in status) {print times[code],code,times[code]*100/counts,"%"}}' web_log.tsv 
+    # $6 !~ /[response]/ 去掉respons行
   ```
-  * 将不充分的列表作为对应参照表，将遍历的所有数据进行对照，记录出现次数，得到出现次数的数组。
+* 个人认为最难实现的功能是**分别统计**不同4XX状态码对应的TOP 10 URL和对应出现的总次数。
+  * 第一步：`awk -F '\t' '$6 ~ /^4/ {print $5,$6}' web_log.tsv | sort -k 2 |uniq -c | sort -nr`  得到 4xx状态码对应的URL 和次数
+  * 第二步  `rev| awk -F ' ' '{print $3,$2,$1}' | rev `，将次数放在最后，因为awk在打印时，会靠右对齐，前面的空格数不定，这样后格式标准分隔符只是一个空格
+  * 第三步  因为次数已经在第一步已经排序好了所以不需要再排序，分404，403 输出前10 就好 
   ```shell
-  function get_count { #统计出现次数
-  for id in "${my_arrary[@]}"; do 
-    i=0
-    while [[ "$id" != "${my_list[${i}]}" ]]; do #加引号，!= 字符的比较也可以
-      i=$((i+1))
-    done
-    my_count[${i}]=$((my_count[i]+1)) 
-  done
-  }
+    awk -F '\t' '$6 ~ /^4/ {print $5,$6}' web_log.tsv | sort -k 2 |uniq -c | sort -nr |rev| awk -F ' ' '{print $3,$2,$1}' | rev |awk -F ' ' 'BEGIN{
+    counts=0;line=0;printf "times: url: \n"} {url[line]=$2;url_status[line]=$1;times[line]=$3;status[$1]=$1;line++} END{
+        for(code in status){
+            print code,"------------";counts=0;line=0;while(counts < 10){
+                if(url_status[line]==code){print times[line],url[line];counts++;};line++}}}' 
   ```
-  * 最后对出现次数进行处理操作。
-* 为了后续根据次数得到对应id或ip或url，不充分数组和次数数组的值的位置应一一对应。
 
-## 统计结果汇总
+* 最后，给定URL输出TOP 100访问来源主机。只需在AWK中设置变量，将命令行输入的参数传入即可。
+  ```shell
+  awk -F '\t' -va="${OPTARG}" '{if($5==a)print $3}' web_log.tsv | sort | uniq -c | sort -nr | head -100 
+  
+  ```
 
 ## 遇到的问题及解决方法
 * 如何判断输入的参数为小数或字符或整数。
@@ -347,14 +322,7 @@ printf "%s has the longest name, length is %s \n" "${longest}" "${max}" >>./outp
   echo "$1" |sed 's/\.//g'  | grep [^0-9] >/dev/null #利用sed对参数进行处理，删去小数点，再利用grep 看是否能够匹配一个不在0-9范围内的字符。
   if [ $? -eq 0 ];then #如果上述命令不正常执行则为小数
   ``` 
-* printf使用时遇到的报错
-  * 首先思考是否是中文输入法的问题,并不是。
-  * 其次思考是windows 和 linux 在转义字符时的差错？？
-  * 其余的报错似乎是因为开头不能为-的原因，删除尝试成功。
-  * 在开头加上空格后，没有报错了。
-  ```shell
-  printf " -h for help\n -j image compression for jpeg image\n"
-  ```
+
 
 * 文件名内含空格，导致操作无法正常进行。linux终端会将空格视作分割符。如下图情况,文件名内有空格，在脚本执行时，会将该文件名分成两个部分，导致无法正常进行操作
   * 解决方法：在进行脚本运行前，修改 `bash` 中变量`IFS` 将空格作为字符串分割删去，然后在脚本执行后将`IFS`恢复为初值。
@@ -408,27 +376,27 @@ printf "%s has the longest name, length is %s \n" "${longest}" "${max}" >>./outp
 ![](./img/cut.png)
 
 * 在管道里的循环，得到的值没有办法留存。退出管道操作后就会消失。
-```shell
-cat ../worldcupplayerinfo.tsv | while read line #阅读每行,统计年龄
-do
+  ```shell
+  cat ../worldcupplayerinfo.tsv | while read line #阅读每行,统计年龄
+  do
     m_count=$((m_count+1)) #这里的m_count 在管道命令结束后，无法留存，会丢失
-done
-```
-```shell
-while read line #阅读每行,统计年龄
-do
+  done
+  ```
+  ```shell
+  while read line #阅读每行,统计年龄
+  do
     m_count=$((m_count+1)) 
-done < ../worldcupplayerinfo.tsv #可以避免上述情况 
-```
+  done < ../worldcupplayerinfo.tsv #可以避免上述情况 
+  ```
 
 * 获得的数据中，有姓名为 player 年龄为 Age的数据
   * 文本处理时，第一列的数据没有舍弃。
-```shell
+  ```shell
   if [[ $line_num -eq 1 ]];then
     line_num=$((line_num+1))
     continue
   fi
-```
+  ```
 ![](./img/error2.png)
 
 * 在web访问日志中，什么是访问来源主机，来源主机的ip，url
@@ -477,11 +445,68 @@ done < ../worldcupplayerinfo.tsv #可以避免上述情况
   done
   ```
 
-* 输出百分比的计算无法正常计算。数值总是认为是0
-  * `amount=$(echo "g_count"/"all" | bc -l)` Runtime error (func=(main), adr=7): Divide by zero，这里报错，all的值认为是0。
-  * 在运算之前`echo ${all}`并不为零，但是在上述命令中，无论是g_count,还是all的值都为0。
-  * 最后采用整数算法，就不会出现该情况。
+* 统计web日志，运行时间过程，代码实用性极低。
+  * 下面是我第一次编写的思路及部分代码
+  * 首先是遍历所有行的指定数据部分，将所有数据存进数组。
+  ```shell
+  while read line #阅读每行
+  do
+    host_id=$(echo "$line" | cut -f 3)   
+    #echo "$host_id"
+    host_id_arrary[$count]="$host_id" 
+    count=$((count+1))
+  done
+  ```
+  * 然后是得到出现的所有数据情况的不重复数组，由于日志有大量重复内容，该筛选出来的列表不能有重复部分，以方便后续的统计工作。
+  ```shell
+  function get_list { #不含重复内容的所有内容的数组
+  my_list[0]="${my_arrary[0]}" #之前遍历得到的数组
+  list_num=1
+  for id in "${my_arrary[@]}"; do 
+    list_count=0 
+    for i in "${my_list[@]}"; do
+      if [[ "${id}" == "$i" ]];then
+        list_count=$((list_count+1))
+      fi
+    done
+    if [[ $list_count -eq 0 ]];then #没有重复则写进无重复数组
+    my_list[$list_num]="$id" 
+    echo "$id"
+    list_num=$((list_num+1))
+    fi
+  done
+  }
+  ```
+  * 将不充分的列表作为对应参照表，将遍历的所有数据进行对照，记录出现次数，得到出现次数的数组。
+  ```shell
+  function get_count { #统计出现次数
+  for id in "${my_arrary[@]}"; do 
+    i=0
+    while [[ "$id" != "${my_list[${i}]}" ]]; do #加引号，!= 字符的比较也可以
+      i=$((i+1))
+    done
+    my_count[${i}]=$((my_count[i]+1)) 
+  done
+  }
+  ```
+  * 我一开始在调试时，只是将遍历行数控制在100，可以跑成功。但是当我开始处理**150万行的数据时**悲剧发生了，这种处理方式**完全无法快速遍历web日志，甚至是无法完成遍历**，光是遍历所有文件，**我就跑了18个小时**。更不用说我之后函数里的循环遍历。
+
+    ![](./img/time-consuming.png)
   
+  * 在网上查阅资料后，才发现一般处理web日志这种数据应该使用**AWK**，修改代码后，只需10几秒便可以得到答案。 
+
+* AWK结合uniq -c ,sort 排序后得到的输出，**次数为第一列且都是向右对齐**，由于左部的空格不规律在继续AWK操作时非常不方便。
+  
+  ![](./img/sort.png)
+  
+  * 结合之前的字符串截取问题的解决，我使用**rev**来解决这个问题。
+  * 第一次rev是将次数换到最右边，且不确定的空格数也在最右边，解决了分隔不方便的问题。
+  * 第二次rev是为例恢复数据，在rev前将输出的列的顺序改变，以达到 次数部分在最右边，且行元素都是以一个空格分隔的标准进行分隔。
+  * 值得**注意**的是：rev后，行元素的分隔符由 **'\t'**变成了**空格**
+    ```shell
+    awk -F '\t' '$6 ~ /^4/ {print $5,$6}' web_log.tsv | sort -k 2 |uniq -c | sort -nr |rev| awk -F ' ' '{print $3,$2,$1}' | rev
+    ```
+    ![](./img/rev.png)
 
 ## 参考文献
 * [Shell判断参数是否为数字的6种方法（是否为整形)](https://blog.csdn.net/u012206617/article/details/112793495)
@@ -495,3 +520,4 @@ done < ../worldcupplayerinfo.tsv #可以避免上述情况
 * [linux – 如何使用’cut’找到最后一个字段](https://www.icode9.com/content-3-464079.html)
 * [linux问题解决：Shell中处理包含空格的文件名](https://blog.csdn.net/qq_45698148/article/details/120064768)
 * [svg 图片压缩](https://blog.csdn.net/qq_58824036/article/details/121321655)
+* [Linux-awk用法](https://blog.csdn.net/weixin_43623871/article/details/118436010)

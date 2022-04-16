@@ -46,18 +46,11 @@ function resolution_compre {
   fi
   folderpath=$1
   if [[ -f "$folderpath" ]]||[[  -d "$folderpath" ]];then
-    for file in $(find "$folderpath" -name "*.jpeg" -or -name "*.png" -or -name "*.jpg" );do  #svg有单独的方法
+    for file in $(find "$folderpath" -name "*.jpeg" -or -name "*.png" -or -name "*.jpg" );do  #imageMagick不支持svg
       echo "$file"
       name=$(echo "$file" |rev| cut -d "." -f 2- | rev)
       name2=$(echo "$file" |rev| cut -d "." -f 1 | rev)
-      svgo "$file" -o "${name}_comp.${name2}" #尺寸不变的分辨率压缩
-    done
-      
-    for file in $(find "$folderpath" -name "*.svg" );do  #svg有单独的方法,install svgo
-      echo "$file"
-      name=$(echo "$file" |rev| cut -d "." -f 2- | rev)
-      name2=$(echo "$file" |rev| cut -d "." -f 1 | rev)
-      svgo "$file" -o "${name}_comp.${name2}" #尺寸不变的分辨率压缩
+      convert "$file" -quality "${quality}" "${name}_comp.${name2}" #尺寸不变的分辨率压缩
     done
   fi
   echo "work is done"

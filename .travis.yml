@@ -3,7 +3,8 @@ language: bash
 before_install:
   - sudo apt-get update && sudo apt-get install -y shellcheck
   - sudo apt-get install -y imagemagick
-  - sudo apt-get install -y p7zip
+  - sudo apt0get install -y p7zip
+
 
 script:
 - ls -l
@@ -14,20 +15,20 @@ script:
 - p7zip -d web_log.tsv.7z
 - ls -l
 - cd codefile/
+- echo "test GCD.sh"
 - bash GCD.sh 4 8
 - bash GCD.sh 4 8.1
 - bash GCD.sh 4 A
 - echo "test task2-2"
 - bash task2-2.sh -h
 - bash task2-2.sh -d / -r -s -u -i -n
-- cat ./output2.txt
 - echo "test task2-2 is done"
 - echo "test task1"
 - cd ../test-img/
 - ls -l
 - cd ../codefile/
 - bash task1.sh -h
-- bash task1.sh -w ../test-img/2/
+- bash task1.sh -w ../test-img/
 - bash task1.sh -r ../test-img/
 - worry
 - 1

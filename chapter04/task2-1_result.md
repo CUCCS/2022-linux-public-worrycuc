@@ -61,7 +61,7 @@
 printf "%s has the longest name, length is %s \n" "${longest}" "${max}" >>./output.txt
 ```
 
-![](./img/ouyput.png)
+![](./img/output.png)
 
 ```
 age in [0,20): 9 1% 
