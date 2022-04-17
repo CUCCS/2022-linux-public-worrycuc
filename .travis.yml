@@ -1,0 +1,45 @@
+language: bash
+
+before_install:
+  - sudo apt-get update && sudo apt-get install -y shellcheck
+  - sudo apt-get install -y imagemagick
+  - sudo apt-get install -y p7zip
+
+
+script:
+- ls -l
+- cd chapter04/
+- wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/worldcupplayerinfo.tsv
+- wget https://c4pr1c3.github.io/LinuxSysAdmin/exp/chap0x04/web_log.tsv.7z
+- ls -l
+- p7zip -d web_log.tsv.7z
+- ls -l
+- cd codefile/
+- echo "test GCD.sh"
+- bash GCD.sh 4 8
+- bash GCD.sh 4 8.1
+- bash GCD.sh 4 A
+- echo "test task2-2"
+- bash task2-2.sh -h
+- bash task2-2.sh -d / -r -s -u -i -n
+- echo "test task2-2 is done"
+- echo "test task1"
+- cd ../test-img/
+- ls -l
+- cd ../codefile/
+- bash task1.sh -h
+- bash task1.sh -w ../test-img/
+- bash task1.sh -c ../test-img/1/
+- bash task1.sh -s ../test-img/2/ -j ../-img/2/
+- cd ../test-img/
+- ls -l
+- cd ../codefile/
+- echo "test task1 is done"
+- echo "test task2-1"
+- bash task2-1.sh -h
+- bash task2-1.sh -a -p -n -o
+- echo "test task2-1 is done"
+
+notifications:
+  email:
+    on_success: never
